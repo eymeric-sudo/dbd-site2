@@ -7,6 +7,7 @@ body {
   padding: 40px 16px;
 }
 
+/* limage en flou dans le fond avec un chemin pour allé chercher le gif  */
 .fond {
   position: absolute;
   top: 0;
@@ -27,6 +28,7 @@ body {
   margin: 0 auto;
 }
 
+/* poue le "Binetot disponible" */
 .titre-petit {
   color: #d9a441;
   font-family: "Barlow Condensed", Arial, sans-serif;
@@ -35,6 +37,7 @@ body {
   text-transform: uppercase;
 }
 
+/* modifictuon sur le 2eme titre dans lordre dimpotance */
 h1 {
   font-family: "Barlow Condensed", Arial, sans-serif;
   font-size: 80px;
@@ -55,6 +58,8 @@ p {
   margin: 30px 0;
 }
 
+/* les propriete des cases comme pour la barre de navigation la couleur change 
+au survole pour mettre en anvat la case sur la quell est la sourie */
 .tuile {
   background: #171b1e;
   border: 1px solid #2b3237;

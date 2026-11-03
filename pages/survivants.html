@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="../css/barre-nav.css">
   <link rel="stylesheet" href="../css/fiches.css">
 </head>
+<!-- la classe page-survivants partage le style des portraits avec les tueurs -->
 <body class="page-fiches page-survivants">
 
   <nav class="barre-nav">
@@ -33,7 +34,11 @@
     <div class="mise-en-page">
     <div class="grille-fiches">
 
+      <!-- chaque survivant reprend le couple label puis zone-droite 
+       : garder cet ordre pour que la selection CSS fonctionne -->
       <label class="tuile-survivant">
+        <!-- checked ouvre Dwight au chargement et le meme name
+          permet de ne choisir quun survivant a la fois -->
         <input class="choix" type="radio" name="choix" checked>
         <span class="cadre-image mini-portrait" data-lettre="D"><img src="../images/survivants/Dwight.png" alt=""></span>
         <span class="nom-tuile">Dwight</span>
@@ -49,6 +54,8 @@
                 <p class="panneau-description">Leader hésitant, prêt à tout pour garder son groupe en vie.</p>
               </div>
             </div>
+            <!-- les trois blocs perk contiennent chacun une icone un nom et
+              un resume de leffet -->
             <div class="panneau-perks">
                 <div class="perk">
                   <div class="cadre-image icone-perk" data-lettre="B"><img src="../images/perks/perks-surv/bond.png" alt="Bond"></div>
@@ -70,6 +77,7 @@
 
           <div class="panneau">
             <h2 class="titre-panneau">Histoire</h2>
+            <!-- dt contient le nom du renseignement et dd sa valeur ; lhistoire complete suit cette liste -->
             <dl class="fiche">
               <dt>Nationalité</dt> <dd>Américain</dd>
               <dt>Métier</dt>      <dd>Employé de bureau</dd>

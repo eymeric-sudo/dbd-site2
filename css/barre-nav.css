@@ -1,7 +1,9 @@
+/* laisse de la place a gauche pour que la barre ne cache pas le contenu */
 body {
   padding-left: 80px; 
 }
 
+/* barre de navigtion a gauche lecran en mode normal */
 .barre-nav {
   position: fixed;
   top: 0;
@@ -47,6 +49,7 @@ body {
   flex-shrink: 0;
 }
 
+/* cache le texte des liens et prepare son apparition progressive */
 .barre-nav a b {
   font-weight: 600;
   opacity: 0;
@@ -62,6 +65,7 @@ body {
   color: #e6e9ea;
 }
 
+/*repere la page actuelle avec du dore et un trait a gauche */
 .barre-nav a.actif {
   background: #1d2327;
   color: #d9a441;
@@ -90,12 +94,15 @@ body {
   object-fit: contain;
 }
 
+/* sur les ecrans de 700px ou moins la navigation passe en bas */
 @media (max-width: 700px) {
+  /* garde de la place sous le contenu pour la barre mobile */
   body {
     padding-left: 16px;
     padding-bottom: 90px;
   }
 
+  /* aligne les liens en ligne et garde la meme taille meme au survol */
   .barre-nav,
   .barre-nav:hover {
     top: auto;
@@ -109,6 +116,7 @@ body {
     box-shadow: none;
   }
 
+  /* cache les textes et le logo pour laisser de la place aux icones */
   .barre-nav a b,
   .barre-nav .nav-logo {
     display: none;

@@ -1,14 +1,19 @@
+/* elargit les pages de fiches pour accueillir la grille et les details */
 .page-fiches .contenu {
   max-width: 1100px;
 }
 
+/* reserve la partie droite pour la fiche avec la meme largeur que zone-droite */
 .mise-en-page {
   position: relative; 
+  /* conserve assez de hauteur pour la fiche de droite meme quand la grille contient peu de tuiles */
   min-height: 520px;
+  /* calc additionne la largeur du panneau (52%) et un espace de 24px pour separer les deux colonnes */
   padding-right: calc(52% + 24px);
   margin: 30px 0;
 }
 
+/* sert de repere aux images en position absolute ; overflow hidden coupe ce qui depasse du cadre */
 .cadre-image {
   position: relative;
   overflow: hidden;
@@ -18,13 +23,16 @@
   justify-content: center;
 }
 
+/* affiche data-lettre comme repere quand aucune image ne recouvre le cadre */
 .cadre-image::before {
+  /* before cree un element visuel sans balise HTML ; attr lit la valeur data-lettre du cadre */
   content: attr(data-lettre);
   font-family: "Barlow Condensed", Arial, sans-serif;
   font-size: 40px;
   color: #3a4247;
 }
 
+/* inset 0 colle limage aux quatre bords ; cover remplit le cadre sans deformation mais peut rogner limage */
 .cadre-image img {
   position: absolute;
   inset: 0;
@@ -33,12 +41,14 @@
   object-fit: cover;
 }
 
+/* repeat(4, 1fr) cree quatre colonnes qui se partagent la place disponible a parts egales */
 .grille-fiches {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
 }
 
+/* style commun aux tuiles de toutes les categories malgre le nom survivant ; aspect-ratio 1 / 1 garde une forme carree */
 .tuile-survivant {
   position: relative;
   aspect-ratio: 1 / 1;
@@ -49,22 +59,27 @@
   cursor: pointer;
 }
 
+/* cache les boutons radio visuellement tout en gardant la selection avec le label et le clavier */
 .choix {
   position: absolute;
   opacity: 0;
+  /* le clic passe au label qui coche le bouton ; contrairement a display none le bouton reste accessible au clavier */
   pointer-events: none;
 }
 
+/* ce selecteur vise seulement les mini-portraits places dans une tuile ; le grand portrait garde ses propres dimensions */
 .tuile-survivant .mini-portrait {
   position: absolute;
   inset: 0;
 }
 
+/* superpose le nom en bas du portrait ; le degrade sombre garde le texte lisible sur limage */
 .tuile-survivant .nom-tuile {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
+  /* trois valeurs correspondent au haut aux deux cotes puis au bas ; lespace du haut etend le degrade au-dessus du nom */
   padding: 24px 10px 8px;
   text-align: left;
   background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
@@ -74,20 +89,26 @@
   font-weight: 600;
 }
 
+/* hover indique le passage de la souris ; checked plus bas conserve le marquage apres la selection */
 .tuile-survivant:hover {
   border-color: #8a9499;
 }
 
+/* has repere la tuile contenant le bouton coche pour marquer la selection */
 .tuile-survivant:has(.choix:checked) {
   border-color: #d9a441;
+  /* sans decalage ni flou le dernier 1px ajoute un liseret exterieur sans agrandir la tuile */
   box-shadow: 0 0 0 1px #d9a441;
 }
 
+/* rend visible la tuile atteinte avec le clavier */
 .tuile-survivant:has(.choix:focus-visible) {
   outline: 2px solid #d9a441;
+  /* eloigne le contour de focus de la tuile sans changer sa taille dans la grille */
   outline-offset: 2px;
 }
 
+/* chaque fiche est cachee au depart ; absolute la place a droite du bloc mise-en-page sans occuper une case de la grille */
 .zone-droite {
   display: none;
   position: absolute;
@@ -97,21 +118,27 @@
   width: 52%;
 }
 
+/* le signe + affiche uniquement le panneau place juste apres la tuile selectionnee */
 .tuile-survivant:has(.choix:checked) + .zone-droite {
   display: block;
 }
 
+/* garde les details visibles au defilement et permet de les faire defiler si le panneau est trop haut */
 .colonne-droite {
   display: flex;
   flex-direction: column;
   gap: 16px;
   position: sticky;
+  /* sticky retient la colonne a 20px du haut pendant le defilement tant que son conteneur le permet */
   top: 20px;
 
+  /* 100vh correspond a la hauteur de lecran ; min retient la plus petite limite entre le parent et lecran moins 40px */
   max-height: min(100%, calc(100vh - 40px));
+  /* ajoute un defilement vertical seulement si le contenu depasse la hauteur disponible */
   overflow-y: auto;
 }
 
+/* habillage commun aux blocs de presentation et dhistoire ; padding garde le contenu a distance de la bordure */
 .panneau {
   background: #171b1e;
   border: 1px solid rgba(217, 164, 65, 0.5);
@@ -119,28 +146,38 @@
   padding: 20px;
 }
 
+/* reserve 150px au portrait puis donne le reste de la ligne aux informations */
 .panneau-haut {
   display: grid;
   grid-template-columns: 150px 1fr;
   gap: 20px;
 }
 
+/* le ratio 3 / 4 donne une hauteur egale aux quatre tiers de la largeur sans fixer de hauteur en pixels */
 .grand-portrait {
   aspect-ratio: 3 / 4;
   border-radius: 10px;
 }
 
+/* is applique aux tueurs et survivants le meme fond et le meme masque de portrait */
 :is(.page-survivants, .page-tueurs) .mini-portrait,
+/* harmonise le grand portrait avec le format 4 / 5 des miniatures de personnages */
 :is(.page-survivants, .page-tueurs) .grand-portrait {
   background: #555 url("../images/fonds/portrait-jeu.webp") center / contain no-repeat;
+  /* melange le gris et limage de fond pour assombrir le fond du portrait */
   background-blend-mode: multiply;
+  /* le masque decoupe le portrait selon la transparence de portrait-jeu.webp :
+     les zones transparentes cachent le portrait et les zones opaques le montrent.
+     Cela cree les bords irreguliers ; contain garde le masque entier sans le deformer. */
   mask: url("../images/fonds/portrait-jeu.webp") center / contain no-repeat;
 }
 
+/* adapte les tuiles des personnages avec un portrait vertical et le nom en dessous */
 :is(.page-survivants, .page-tueurs) .grille-fiches {
   gap: 12px 8px;
 }
 
+/* ces regles remplacent le cadre carre commun sur les pages de personnages ; overflow visible laisse depasser les effets de contour */
 :is(.page-survivants, .page-tueurs) .tuile-survivant {
   aspect-ratio: auto;
   border-radius: 0;
@@ -149,6 +186,7 @@
   overflow: visible;
 }
 
+/* remet le portrait dans le flux normal ; sa hauteur suit le ratio 4 / 5 au lieu de remplir toute la tuile */
 :is(.page-survivants, .page-tueurs) .tuile-survivant .mini-portrait {
   position: relative;
   inset: auto;
@@ -159,6 +197,7 @@
 :is(.page-survivants, .page-tueurs) .mini-portrait img,
 :is(.page-survivants, .page-tueurs) .grand-portrait img {
   object-fit: cover;
+  /* aligne le recadrage en bas au centre pour garder le bas du personnage visible */
   object-position: center bottom;
 }
 
@@ -168,6 +207,7 @@
   border: 0;
 }
 
+/* annule le placement superpose du nom pour le remettre sous le portrait */
 :is(.page-survivants, .page-tueurs) .nom-tuile {
   position: static;
   display: block;
@@ -179,20 +219,27 @@
   text-transform: uppercase;
 }
 
+/* au survol, le contour lumineux est une ombre et non une bordure :
+   drop-shadow suit les formes visibles apres le decoupage par le masque,
+   alors que border ou box-shadow suivraient le cadre rectangulaire de la tuile. */
 :is(.page-survivants, .page-tueurs) .tuile-survivant:hover {
+  /* 0 0 : aucun decalage ; 2px : flou de la lueur ; #dce3e6 : couleur claire */
   filter: drop-shadow(0 0 2px #dce3e6);
 }
 
+/* remplace le liseret dore commun par une lueur blanche pour le personnage selectionne */
 :is(.page-survivants, .page-tueurs) .tuile-survivant:has(.choix:checked) {
   box-shadow: none;
   filter: drop-shadow(0 0 2px #fff);
 }
 
+/* supprime le pseudo-element de remplacement des portraits qui contiennent deja une balise img */
 :is(.page-survivants, .page-tueurs) .mini-portrait:has(img)::before,
 :is(.page-survivants, .page-tueurs) .grand-portrait:has(img)::before {
   content: none;
 }
 
+/* hierarchie du texte : nom principal ici puis description plus petite et titres de sections en dore plus bas */
 .panneau-nom {
   font-family: "Barlow Condensed", Arial, sans-serif;
   font-size: 30px;
@@ -205,6 +252,7 @@
   font-size: 16px;
 }
 
+/* range les trois competences du personnage sur une ligne */
 .panneau-perks {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -212,6 +260,7 @@
   margin-top: 20px;
 }
 
+/* chaque competence possede son propre cadre ; le centrage sapplique a son nom et a son resume */
 .perk {
   background: #121618;
   border: 1px solid #2b3237;
@@ -223,14 +272,19 @@
 .icone-perk {
   width: 56px;
   height: 56px;
+  /* les marges laterales auto centrent le cadre de 56px dans sa carte de competence */
   margin: 4px auto 10px;
   background: transparent;
+  /* cree un groupe de superposition local pour que le losange avec z-index -1 reste derriere licone sans passer derriere le panneau */
   isolation: isolate;
 }
 
+/* cree un losange violet derriere licone avec un carre tourne de 45 degres */
 .icone-perk::after {
+  /* un contenu vide suffit a creer le pseudo-element after qui dessine le fond sans ajouter de texte */
   content: "";
   position: absolute;
+  /* reduit le carre avant sa rotation pour laisser de la place aux pointes du losange */
   inset: 9px;
   z-index: -1;
   transform: rotate(45deg);
@@ -246,10 +300,12 @@
   background: transparent;
 }
 
+/* retire la lettre de remplacement quand une image de competence est presente */
 .icone-perk:has(img)::before {
   content: none;
 }
 
+/* contain affiche toute licone sans la rogner contrairement au cover utilise pour les portraits */
 .icone-perk img {
   object-fit: contain;
 }
@@ -274,8 +330,10 @@
   margin: 0 0 12px;
 }
 
+/* aligne les intitules dt et leurs valeurs dd sur deux colonnes */
 .fiche {
   display: grid;
+  /* la premiere colonne prend la largeur de son intitule le plus long et la seconde utilise le reste */
   grid-template-columns: max-content 1fr;
   gap: 6px 16px;
   margin: 0 0 14px;
@@ -286,6 +344,7 @@
   color: #8a9499;
 }
 
+/* retire le retrait ajoute par defaut aux valeurs dd pour garder les deux colonnes alignees */
 .fiche dd {
   margin: 0;
   color: #e6e9ea;
@@ -296,11 +355,13 @@
   font-size: 15px;
 }
 
+/* le signe > vise uniquement la description directement dans le panneau sans toucher celles du bloc panneau-haut */
 .panneau > .panneau-description {
   margin-top: 16px;
   font-size: 15px;
 }
 
+/* sur tablette les details reviennent dans la grille sur toute sa largeur et ne restent plus fixes au defilement */
 @media (max-width: 900px) {
   .mise-en-page {
     padding-right: 0;
@@ -308,21 +369,26 @@
   }
 
   .grille-fiches {
+    /* complete les trous disponibles dans la grille avec les tuiles suivantes quand la fiche occupe une ligne entiere */
     grid-auto-flow: dense;
   }
 
   .zone-droite {
+    /* dans cette fiche mobile static remet le panneau dans le flux de la grille au lieu de le superposer a droite */
     position: static;
     width: auto;
+    /* etend la fiche de la premiere a la derniere ligne de colonne donc sur toute la largeur */
     grid-column: 1 / -1;
   }
 
   .colonne-droite {
     position: static;
+    /* la fiche reprend toute sa hauteur naturelle ; le contenu se lit avec le defilement de la page */
     max-height: none;
   }
 }
 
+/* sur telephone garde trois tuiles par ligne et empile le portrait et les competences */
 @media (max-width: 500px) {
   .grille-fiches {
     grid-template-columns: repeat(3, 1fr);
@@ -333,6 +399,7 @@
   }
 
   .grand-portrait {
+    /* evite que le portrait devienne trop grand quand la presentation passe sur une seule colonne */
     max-width: 180px;
   }
 
